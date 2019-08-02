@@ -1,0 +1,50 @@
+.book_listItem
+  padding: 20px;
+  background: #fff;
+  .top
+    font-size: 28px;
+  .bottom
+    font-size: 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .b-left
+      .img
+        width: 100px;
+        height: auto;
+    .b-right
+      .at-icon
+        font-size: 50px;
+        color: #3c3c3c;  
+    .b-center
+      width: 80%;
+      margin-left: 10px;
+      .info
+        width:100px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis; 
+        .richtext
+          display inline;      
+  &:active
+    background: #f0f0f0;
+.modal
+  z-index: 9999;
+  .at-modal__container
+    width: 96%;
+    .title
+      color: #0081ff;
+      border: 1px solid #ccc;
+      text-align: center;
+    .s-item
+      border: 1px solid #ccc;
+      text-align: center;
+      padding: 10px 0;
+      &.green
+        color: green;
+      &.red
+        color: red;
+    .out
+      word-wrap:break-word
+      

@@ -1,0 +1,51 @@
+.college_listItem
+  border-bottom: 1px solid #ccc;
+  padding-top: 20px;
+  background: #fff;
+  .top
+    font-size: 28px;
+    .b-left
+      .img
+        width: 100%;
+        height: auto;
+    .b-right
+      .at-icon
+        font-size: 50px;
+        color: #3c3c3c;  
+    .b-center
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      .author
+        font-size: 32px;
+        .collegeName
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis; 
+      .statics
+        .tip
+          color: #ebd75a;
+      .info
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis; 
+  .bottom
+    .at-accordion__header
+      font-size: 28px;
+      font-weight: 600;
+    .at-accordion__content--inactive
+      display:none;
+    .at-accordion__content  
+      .simpleDesc
+        font-size: 24px;
+        color: #a4a4a4;
+        display: inline-block;
+        padding: 0 20px;
+      
+  &:active
+    background: #f0f0f0;
+      
+
+
+      
+

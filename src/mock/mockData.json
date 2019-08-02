@@ -1,0 +1,187 @@
+{
+  "business": [
+    {
+      "id": "12dfasdsafsff12",
+      "title": "在家里如何使用VPN？"
+    },
+    {
+      "id": "56fasfdfasdff",
+      "title": "我要借的书在丁家桥，怎么办？"
+    },
+    {
+      "id": "253fasfasfdasdfa",
+      "title": "SCI论文的检索号在哪儿可以查"
+    },
+    {
+      "id": "ssdfa",
+      "title": "图书逾期归还会怎么样"
+    }
+  ],
+  "storage": [
+    {
+      "id": "546",
+      "title": "有梁思成的著作吗？"
+    },
+    {
+      "id": "dfas",
+      "title": "振动与噪声类的书籍在哪个馆"
+    },
+    {
+      "id": "dsa",
+      "title": "《平凡的世界》馆藏剩余数量"
+    },
+    {
+      "id": "dfasjalsdjf",
+      "title": "关于中国建筑史的纸本图书"
+    }
+  ],
+  "news": [
+    {
+      "id": "saa3452",
+      "title": "近期讲座"
+    },
+    {
+      "id": "df1as",
+      "title": "最新公告"
+    },
+    {
+      "id": "dsfaasdfa",
+      "title": "新闻资讯"
+    },
+    {
+      "id": "4153132131231",
+      "title": "资源动态"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "123123",
+      "title": "东南大学有哪些学院"
+    },
+    {
+      "id": "sdf123",
+      "title": "冶金学院的院士"
+    },
+    {
+      "id": "s2d3dc",
+      "title": "研究机械的教授有哪些"
+    },
+      {
+        "id": "546781as",
+        "title": "张化光教授"
+      }
+    
+  ],
+  "literature": [
+    {
+      "id": "45afdas",
+      "title": "会计行业下载最多的论文"
+    },
+    {
+      "id": "246afdasdf",
+      "title": "人工智能相关的硕士论文"
+    },
+    {
+      "id": "64fa6sdfas",
+      "title": "东南大学关于大数据的论文"
+    },
+    {
+      "id": "123dfafasdf2",
+      "title": "施一公最新发表的论文"
+    }
+  ],
+  "knowledge":[
+    {
+      "id": "asdfas546",
+      "title": "甲醛对人体的危害表现"
+    },
+    {
+      "id": "fdsafas121",
+      "title": "台风为什么会被除名"
+    },
+    {
+      "id": "fasdfas8597",
+      "title": "端午节有哪些习俗"
+    },
+    {
+      "id":"kdsaflasdlfasdflas",
+      "title": "民事行为能力的定义"
+    }
+  ],
+  "libraryStorage": [
+    { "id": "l1",
+      "location": "东北大学图书馆",
+      "status": true,
+      "outTime": "2018-12-1",
+      "backTime": "2018-12-5"
+    },
+    {
+      "id": "l2",
+      "location": "东北大学图书馆",
+      "status": false,
+      "outTime": "2018-12-3",
+      "backTime": null
+    },
+    {
+      "id": "l3",
+      "location": "东北大学图书馆",
+      "status": true,
+      "outTime": "2018-12-1",
+      "backTime": "2018-12-21"
+    },
+    {
+      "id": "l4",
+      "location": "东北大学图书馆",
+      "status": false,
+      "outTime": "2018-12-15",
+      "backTime": null
+    }
+
+  ],
+  "handleOl": [
+    {
+      "id": "ho1",
+      "title":"我的图书馆",
+      "src":"http://www.libopac.seu.edu.cn:8080/reader/"
+    },
+    {
+      "id": "ho2",
+      "title":"个人借阅信息查询",
+      "src":"http://www.libopac.seu.edu.cn:8080/reader/"
+    },
+    {
+      "id": "ho3",
+      "title":"图书预约",
+      "src":"http://www.libopac.seu.edu.cn:8080/reader/"
+    },
+    {
+      "id": "ho4",
+      "title":"图书续借",
+      "src":"http://www.libopac.seu.edu.cn:8080/reader/"
+    }
+  ],
+  "eduJob": [
+    {
+    "id":"ej1",
+    "title":"本科历年录取分数线",
+    "src":"http://zs.neu.edu.cn/html/lqfs/lqfslist.html"
+    },
+    {
+      "id":"ej2",
+      "title":"硕士招生信息",
+      "src":"http://www.graduate.neu.edu.cn/dongda/qgtk/index.jhtml"
+    },
+    {
+      "id":"ej3",
+      "title":"博士招生信息",
+      "src":"http://www.graduate.neu.edu.cn/dongda/bszs/index.jhtml"
+    },
+    {
+      "id":"ej4",
+      "title":"企业招聘信息",
+      "src":"http://jobneu.jysd.com/teachin"
+    }
+
+  ]
+
+}

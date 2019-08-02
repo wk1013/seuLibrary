@@ -1,0 +1,43 @@
+.literature_listItem
+  border-bottom: 1px solid #ccc;
+  padding: 20px;
+  background: #fff;
+  .bottom
+    font-size: 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .b-left
+      .img
+        width: 100px;
+        height: auto;
+    .b-center
+      width: 100%;
+      padding: 3px;
+      .title
+        font-size: 26px;
+        word-wrap: break-word;
+        color: #006cff;
+        width: 100%;
+        margin-bottom: 20px;
+        .content
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 4;
+          /* autoprefixer: off */
+          -webkit-box-orient: vertical;
+          /* autoprefixer: on */
+      .info
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;   
+        color: #aeaeae;
+        .link
+          display:inline-block;
+          color:#006cff; 
+  &:active
+    background: #f0f0f0;
+.at-float-layout
+  z-index: 9999 !important;   
