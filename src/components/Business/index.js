@@ -8,6 +8,7 @@ class Business extends Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     const data = this.props.data;
     const likeData = this.props.likeData;

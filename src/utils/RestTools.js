@@ -148,10 +148,15 @@ const completeUrl = str => {
     .replace(/\n/g, "<br/>")
     .replace(/<img src="/g, '<img src="http://qa2.cnki.net/seu/')
     .replace(/<img src='/g, "<img src='http://qa2.cnki.net/seu/")
+    // .replace(
+    //   /<a href="AnswerImage/g,
+    //   '<a href="http://qa2.cnki.net/seu/AnswerImage'
+    // )
     .replace(
       /<a href="AnswerImage/g,
-      '<a href="http://qa2.cnki.net/seu/AnswerImage'
-    );
+      '<a href="http://192.168.100.75/seu/AnswerImage'
+    )
+    ;
 };
 
 const defaultUrl =
