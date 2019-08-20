@@ -2,12 +2,11 @@ import Taro from "@tarojs/taro";
 
 const storageUrl = "http://192.168.107.232:8232/qasoda/";
 // const storageUrl = 'http://124.193.98.179:8232/qasoda/';
-const serverUrl = "http://ai.cnki.net/dn.qa.api";
-// const serverUrl = "http://192.168.100.75/dn.qa.api";
+// const serverUrl = "http://ai.cnki.net/dn.qa.api";
+const serverUrl = "http://192.168.100.75/dn.qa.api";
 const sgServerUrl = "http://ai.cnki.net/wx.qa.api";
 const weatherUrl = "https://free-api.heweather.com/s6/weather";
-const collectUrl = "http://ai.cnki.net/dn.qa.kc/KeyWord";
-const httpRequest = function(
+const httpRequest = function (
   url,
   method,
   data = "",
@@ -19,14 +18,12 @@ const httpRequest = function(
   const newUrl = sg
     ? sgServerUrl
     : storage
-    ? storageUrl
-    : weather
-    ? weatherUrl
-    : collect
-    ? collectUrl
-    : serverUrl;
+      ? storageUrl
+      : weather
+        ? weatherUrl
+        : serverUrl;
   if (data === "") {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       Taro.request({
         url: newUrl + url,
         method: method,
@@ -45,7 +42,7 @@ const httpRequest = function(
         });
     });
   } else {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       Taro.request({
         url: newUrl + url,
         method: method,
@@ -66,17 +63,52 @@ const httpRequest = function(
   }
 };
 
- const getInputTips  = (value) => {
-  return new Promise(function(reslove, reject) {
+const httpRequest_a = function (common_url, url, method, params = '') {
+  let newUrl = common_url + url
+  let opt = {
+    url: newUrl,
+    method: method,
+    header: {
+      'content-type': 'application/json',
+      token: Taro.getStorageSync('token')
+    }
+  }
+  if (params && method !== 'POST') {
+    //如果网络请求参数
+    let paramsArray = [];
+    //拼接参数
+    Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]));
+    if (newUrl.search(/\?/) === -1) {
+      newUrl += '?' + paramsArray.join('&');
+    } else {
+      newUrl += '&' + paramsArray.join('&');
+    }
+    opt = Object.assign(opt, { url: newUrl })
+  } else {
+    opt = Object.assign(opt, { data: JSON.stringify(params) });
+  }
+  return new Promise(function (resolve, reject) {
+    Taro.request(opt)
+      .then(responseData => {
+        resolve(responseData.data)//网络请求成功返回的数据
+      })
+      .catch(err => {
+        reject(err)//网络请求失败返回的数据
+      })
+  })
+}
+
+const getInputTips = (value) => {
+  return new Promise(function (reslove, reject) {
     fetch(
       `http://192.168.100.75/dn.qa.sug/su.ashx?action=getsmarttips&p=0.9044369541594852&kw=${
-        value
+      value
       }&td=1560427140234&tdsourcetag=s_pcqq_aiomsg`,
     )
-      .then(function(response) {
+      .then(function (response) {
         return response.text();
       })
-      .then(function(myJson) {
+      .then(function (myJson) {
         const tipsData = JSON.parse(myJson.replace(/var oJson = /g, '')).results;
         reslove(tipsData);
       })
@@ -85,7 +117,7 @@ const httpRequest = function(
         reject(err);
       });
   })
- }
+}
 
 const lineFeed = str => {
   return "<p>" + str.replace(/\n/g, "</p><p>") + "</p>";
@@ -201,14 +233,14 @@ const GetGUID = () => {
   return getCookie("guid");
 };
 
-const setCookie = function(cname, cvalue, exdays) {
+const setCookie = function (cname, cvalue, exdays) {
   var d = new Date();
   d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
   var expires = "expires=" + d.toUTCString();
   window.document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 };
 
-const getCookie = function(cname) {
+const getCookie = function (cname) {
   var name = cname + "=";
   var ca = window.document.cookie.split(";");
   for (var i = 0; i < ca.length; i++) {
@@ -226,6 +258,7 @@ export default {
   serverUrl,
   completeUrl,
   httpRequest,
+  httpRequest_a,
   translteToRed,
   removeRed,
   defaultUrl,

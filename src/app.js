@@ -13,7 +13,7 @@ import "./app.styl";
 
 class App extends Component {
   config = {
-    pages: ["pages/index/index", "pages/result/index", "pages/webView/index"],
+    pages: ["pages/index/index", "pages/result/index", "pages/webView/index", "pages/message/index"],
     window: {
       backgroundTextStyle: "light",
       navigationBarBackgroundColor: "#fff",

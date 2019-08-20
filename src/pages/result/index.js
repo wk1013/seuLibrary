@@ -18,16 +18,11 @@ import Footer from '../../components/Footer'
 import NewsBlock from '../../components/NewsBlock'
 import voiceRecording from '../../statics/voice-recording.gif'
 import ReferenceList from '../../components/Reference/ReferenceList'
-import OfficeInfo from '../../components/OfficeInfo/OfficeInfo'
 import Weather from '../../components/Weather/Weather'
 import LibraryStorage from '../../components/LibraryStorage/LibraryStorage'
 import UserFaq from '../../components/UserFaq'
 import JournalList from '../../components/JournalList'
 import './index.styl'
-
-function sendMsg(q) {
-  NameSpace.keyword.execq(q)
-}
 
 let timer = null;
 
@@ -45,6 +40,7 @@ export default class Index extends Component {
       loading: true,
       showVoice: false,
       isOpened: false,
+      showIcon: false,
       bookOpen: false,
       libraryStorage: [],
       floatContent: null,
@@ -57,7 +53,6 @@ export default class Index extends Component {
     const guid = this.state.guid
     const question =
       this.state.searchValue || decodeURIComponent(this.$router.params.q) //解码参数，浏览器会编码
-    sendMsg(question)
     this.setState(
       {
         searchValue: question
@@ -188,13 +183,13 @@ export default class Index extends Component {
           'onVoiceRecordEnd',
           'translateVoice'
         ],
-        success: function () { }
+        success: function () {
+          this.setState({
+            showIcon: true
+          })
+        }
       })
     })
-    // window.wx.error(function() {
-    //   const url = window.location.href.split("#")[0];
-    //   RestTools.getSignatureFromServer(url);
-    // });
   }
 
   handleTouchStart = e => {
@@ -228,10 +223,8 @@ export default class Index extends Component {
             that.setState(
               {
                 searchValue: result
-                // data:null
               },
               () => {
-                // that.handleSearch(result);
                 Taro.redirectTo({
                   url: `../../pages/result/index?q=${encodeURIComponent(
                     result
@@ -344,8 +337,22 @@ export default class Index extends Component {
       })
   }
 
+  behaviorCollect(question) {
+    RestTools.httpRequest_a('http://192.168.103.24:8080/', 'mscollect/admin/cache/submit', 'POST', {
+      question: question,
+      type: 'search',
+      ClientType: 'mobile',
+      browser: 'Webkit',
+      userid: RestTools.GetGUID(),
+      ip: '182.98.177.137',
+    }).then(res => {
+      console.log(res)
+    })
+  }
+
   //开始搜索
   handleSearch = value => {
+    this.behaviorCollect(value)
     this.setState(
       {
         searchValue: value,
@@ -516,6 +523,7 @@ export default class Index extends Component {
       data,
       loading,
       showVoice,
+      showIcon,
       errMsg = null,
       sg,
       isOpened,
@@ -616,7 +624,6 @@ export default class Index extends Component {
       }
     }
 
-    console.log(journalData)
     return (
       <View className='result'>
         <View className='r_top'>
@@ -625,10 +632,10 @@ export default class Index extends Component {
             onSearch={this.handleSearchClick.bind(this)}
             onGoBack={this.handleGoBack.bind(this)}
           />
-          <Icon
+          {showIcon ? <Icon
             className='micSwitch iconfont icon-microphone'
             onClick={this.switchMic.bind(this)}
-          />
+          /> : null}
         </View>
 
         <ScrollView
@@ -697,7 +704,6 @@ export default class Index extends Component {
             ? bookData.map(item => {
               return item.intent_id === '8' ||
                 item.intent_id === '7' ||
-                item.intent_id === '4' ||
                 item.intent_id === '6' ? (
                   item.intent_id === '8' ? (
                     <BookSummary

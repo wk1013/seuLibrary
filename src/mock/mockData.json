@@ -181,7 +181,32 @@
       "title":"企业招聘信息",
       "src":"http://jobneu.jysd.com/teachin"
     }
-
+  ],
+  "message":[
+    {
+      "id":"mg1",
+      "question":"在家里如何使用VPN？",
+      "answer":"为了方便本校读者在校外能够访问校园网内资源及图书馆资源，网络与信息中心为全校师生开通了VPN服务。（我校教职工和全日制在校学生已自动开通VPN服务，无需另行申请即可使用）"
+    },
+    {
+      "id":"mg2",
+      "question":"甲醛对人体的危害表现",
+      "answer":""
+    },
+    {
+      "id":"mg3",
+      "question":"端午节有哪些习俗",
+      "answer":""
+    },
+    {
+      "id":"mg4",
+      "question":"我的图书馆",
+      "answer":""
+    },
+    {
+      "id":"mg5",
+      "question":"人工智能相关的硕士论文",
+      "answer":""
+    }
   ]
-
 }

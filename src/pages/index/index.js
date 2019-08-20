@@ -1,6 +1,6 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, ScrollView, Text, Icon } from "@tarojs/components";
-import { AtFab, AtToast } from "taro-ui";
+import { AtFab, AtToast, AtBadge, AtIcon } from "taro-ui";
 import SearchPanel from "../../components/SearchPanel";
 import AppBlock from "../../components/AppBlock";
 import "./index.styl";
@@ -16,14 +16,17 @@ export default class Index extends Component {
       searchValue: "",
       showVoice: false,
       isOpened: false,
-			array:JSON.parse(localStorage.getItem('History')) || []
+      showIcon: false,
+      array: JSON.parse(localStorage.getItem('History')) || [],
+      message: 0
     };
   }
 
   componentDidMount() {
+    this.behaviorCollect('')
     const loactionUrl = window.location.href;
     RestTools.getSignatureFromServer(loactionUrl);
-    window.wx.ready(function() {
+    window.wx.ready(function () {
       window.wx.checkJsApi({
         jsApiList: [
           "startRecord",
@@ -31,27 +34,47 @@ export default class Index extends Component {
           "onVoiceRecordEnd",
           "translateVoice"
         ],
-        success: function() {
-          console.log("check success");
+        success: function () {
+          this.setState({
+            showIcon: true
+          })
         }
       });
     });
-    // window.wx.error(function() {
-    //   const url = window.location.href.split("#")[0];
-    //   RestTools.getSignatureFromServer(url);
-    // });
   }
 
-  componentWillUnmount() {}
+  behaviorCollect(question) {
+    RestTools.httpRequest_a('http://192.168.103.24:8080/', 'mscollect/admin/cache/submit', 'POST', {
+        question: question,
+        type: 'home',
+        ClientType: 'mobile',
+        browser: 'Webkit',
+        userid: RestTools.GetGUID(),
+        ip: '182.98.177.137',
+    }).then(res => {
+      console.log(res)
+    })
+  }
 
   componentDidShow() {
+    const guid = RestTools.GetGUID();
+    console.log(guid)
+    const message = mockData.message.length
+    // RestTools.httpRequest('', 'GET', {
+    //   guid: guid
+    // }).then(res => {
+    //   const message = res.length;
+    //   this.setState({
+    //     searchValue: "",
+    //     message: message > 0 ? message : 0
+    //   })
+    // }).catch(res => {
+    //   console.log(res)
+    // })
     this.setState({
-      searchValue: ""
+      searchValue: "",
+      message: message
     });
-  }
-
-  componentDidShow() {
-  
   }
 
   handleClickItem = value => {
@@ -71,20 +94,20 @@ export default class Index extends Component {
       searchValue: value
     })
     // 跳转到目的页面，打开新页面
-		this.state.array=JSON.parse(localStorage.getItem('History'))||[];
-		this.state.array.unshift(value);
-		for(var i=0;i<this.state.array.length;i++){
-			for(var j=i+1;j<this.state.array.length;j++){
-				if(this.state.array[i]===this.state.array[j]){
-					this.state.array.splice(j,1);
-					i--;
-				}
-			}
-		}
-		if(this.state.array.length>10){
-			this.state.array.pop();
-		}
-		localStorage.setItem("History",JSON.stringify(this.state.array));
+    this.state.array = JSON.parse(localStorage.getItem('History')) || [];
+    this.state.array.unshift(value);
+    for (var i = 0; i < this.state.array.length; i++) {
+      for (var j = i + 1; j < this.state.array.length; j++) {
+        if (this.state.array[i] === this.state.array[j]) {
+          this.state.array.splice(j, 1);
+          i--;
+        }
+      }
+    }
+    if (this.state.array.length > 10) {
+      this.state.array.pop();
+    }
+    localStorage.setItem("History", JSON.stringify(this.state.array));
     Taro.navigateTo({ url: `../result/index?q=${encodeURIComponent(value)}` });
   };
 
@@ -100,28 +123,28 @@ export default class Index extends Component {
   handleRecord = () => {
     let that = this;
     window.wx.stopRecord({
-      success: function(response) {
+      success: function (response) {
         let localId = response.localId;
         window.wx.translateVoice({
           localId: localId,
           isShowProgressTips: 1, // 默认为1，显示进度提示
-          success: function(res) {
+          success: function (res) {
             if (!res.translateResult) {
-              Taro.showToast({title:"哎呀没听清楚呢，请刷新页面再试",icon:'none'});
+              Taro.showToast({ title: "哎呀没听清楚呢，请刷新页面再试", icon: 'none' });
             }
             let result = res.translateResult;
             //去掉最后一个句号
             result = result.substring(0, result.length - 1);
             that.setState({
               searchValue: result
-            },()=>{
+            }, () => {
               that.handleSearch(result)
             });
           }
         });
       },
-      fail: function() {
-        Taro.showToast({title:"哎呀没听清楚呢，请刷新页面再试",icon: 'none'});
+      fail: function () {
+        Taro.showToast({ title: "哎呀没听清楚呢，请刷新页面再试", icon: 'none' });
       }
     });
   };
@@ -138,19 +161,24 @@ export default class Index extends Component {
     e.preventDefault()
     this.setState({
       isOpened: false
-    })    
+    })
     this.handleRecord();
   };
 
-  switchMic =() => {
+  switchMic = () => {
     const showVoice = this.state.showVoice;
     this.setState({
       showVoice: !showVoice
     })
   }
 
+  //跳转消息推送
+  goMgClick() {
+    Taro.navigateTo({ url: `../message/index` });
+  }
+
   render() {
-    const { searchValue, showVoice, isOpened } = this.state;
+    const { searchValue, showVoice, isOpened, showIcon } = this.state;
     return (
       <View className='index'>
         <View className='top'>
@@ -158,7 +186,16 @@ export default class Index extends Component {
             searchValue={searchValue}
             onSearch={this.handleSearch.bind(this)}
           />
-          <Icon  className='micSwitch iconfont icon-microphone' onClick={this.switchMic.bind(this)}></Icon>
+          {showIcon ? <Icon className='micSwitch iconfont icon-microphone' onClick={this.switchMic.bind(this)}></Icon> : null}
+          {/* <View onClick={this.goMgClick.bind(this)}>
+            <AtBadge
+              value={this.state.message > 0 ? this.state.message : 0}
+              className="inform"
+              maxValue={99}
+            >
+              <AtIcon value='message' size='24' color="#fff"></AtIcon>
+            </AtBadge>
+          </View> */}
         </View>
 
         <ScrollView className='bottom'>
