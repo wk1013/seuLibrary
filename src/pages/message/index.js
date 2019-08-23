@@ -1,13 +1,13 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Icon } from '@tarojs/components'
-import { AtFab, AtToast, AtList, AtListItem } from 'taro-ui'
+import { AtFab, AtToast, AtList, AtListItem, AtPagination } from 'taro-ui'
 import RestTools from '../../utils/RestTools';
 import MultiSearch from '../../components/SearchPanel/MultiSearch';
 import Footer from '../../components/Footer';
 import voiceRecording from '../../statics/voice-recording.gif';
-import mockData from "../../mock/mockData.json";
 import './index.styl'
 
+let maxPage = 1;
 export default class Index extends Component {
     constructor(props) {
         super(props)
@@ -16,26 +16,17 @@ export default class Index extends Component {
             showVoice: false,
             isOpened: false,
             showIcon: false,
-            message: []
+            dataList: [],
+            pageInfo: {
+                pageCount: 1,
+                pageSize: 5,
+            }
         }
     }
 
     componentWillMount() {
-        const guid = RestTools.GetGUID();
-        // RestTools.httpRequest('', 'GET', {
-        //   guid: guid
-        // }).then(res => {
-        //   const message = res;
-        //   this.setState({
-        //     message: message
-        //   })
-        // }).catch(res => {
-        //   console.log(res)
-        // })
-        const message = mockData.message
-        this.setState({
-            message: message
-        })
+        // window.addEventListener('beforeunload', this.beforeunload);
+        this.getData(this.state.pageInfo);
     }
 
     componentDidMount() {
@@ -56,6 +47,61 @@ export default class Index extends Component {
                 }
             })
         })
+    }
+
+    componentWillUnmount() {
+        this.changeState(this.state.pageInfo)
+        // window.removeEventListener('beforeunload', this.beforeunload)
+    }
+
+    getData = pageInfo => {
+        const guid = RestTools.GetGUID();
+        RestTools.httpRequest_a(RestTools.mscollectUrl, 'msshow/admin/answer/getQuestionLists', 'GET', {
+            username: guid,
+            pageCount: pageInfo.pageCount,
+            pageSize: pageInfo.pageSize,
+        })
+            .then(res => {
+                if (res.code === 200) {
+                    this.setState({
+                        dataList: res.result.data,
+                        pageInfo: res.result.pageInfo,
+                    });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+
+    beforeunload = (e) => {
+        this.changeState(this.state.pageInfo)
+    }
+
+    changeState = pageInfo => {
+        const guid = RestTools.GetGUID();
+        RestTools.httpRequest_a(RestTools.mscollectUrl, 'msshow/admin/answer/changeState', 'GET', {
+            username: guid,
+            pageCount: maxPage,
+            pageSize: pageInfo.pageSize,
+        })
+            .then(res => {
+                if (res.code === 200) {
+                    console.log('请求成功');
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+
+    onChangePage(value) {
+        const pageCount = value.current;
+        const pageSize = this.state.pageInfo.pageSize;
+        if (pageCount >= maxPage) {
+            maxPage = pageCount
+        }
+        this.getData({ pageCount: pageCount, pageSize: pageSize });
     }
 
     handleTouchStart = e => {
@@ -167,11 +213,11 @@ export default class Index extends Component {
             showVoice,
             isOpened,
             showIcon
-        } = this.state
-        const data = this.state.message;
+        } = this.state;
+        const pageInfo = this.state.pageInfo;
+        const data = this.state.dataList;
         const List = data.length > 0 ? data.map(item =>
             <AtListItem
-                key={item.id}
                 title={item.question}
                 onClick={this.handleClick.bind(this, item.question)}
                 iconInfo={{ value: "tag" }}
@@ -195,6 +241,13 @@ export default class Index extends Component {
                     <AtList>
                         {List}
                     </AtList>
+                    {data.length > 0 ? <AtPagination
+                        className="page"
+                        total={pageInfo ? pageInfo.total : 5}
+                        pageSize={pageInfo ? pageInfo.pageSize : 0}
+                        current={pageInfo ? pageInfo.pageCount : 5}
+                        onPageChange={this.onChangePage.bind(this)}
+                    /> : null}
                 </View>
 
                 {showVoice && (

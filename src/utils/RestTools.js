@@ -6,6 +6,9 @@ const storageUrl = "http://192.168.107.232:8232/qasoda/";
 const serverUrl = "http://192.168.100.75/dn.qa.api";
 const sgServerUrl = "http://ai.cnki.net/wx.qa.api";
 const weatherUrl = "https://free-api.heweather.com/s6/weather";
+const submitUrl = "http://qa2.cnki.net/";
+const mscollectUrl = "http://192.168.103.24:8080/";
+// const submitUrl = "http://192.168.103.24:8080/";
 const httpRequest = function (
   url,
   method,
@@ -264,6 +267,8 @@ export default {
   defaultUrl,
   sourceDb,
   webViewUrl,
+  submitUrl,
+  mscollectUrl,
   addAtag,
   signaltureUrl,
   fixImgSrc,

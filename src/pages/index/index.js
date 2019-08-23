@@ -18,7 +18,11 @@ export default class Index extends Component {
       isOpened: false,
       showIcon: false,
       array: JSON.parse(localStorage.getItem('History')) || [],
-      message: 0
+      message: 0,
+      pageInfo: {
+        pageCount: 1,
+        pageSize: 5,
+      }
     };
   }
 
@@ -44,13 +48,13 @@ export default class Index extends Component {
   }
 
   behaviorCollect(question) {
-    RestTools.httpRequest_a('http://192.168.103.24:8080/', 'mscollect/admin/cache/submit', 'POST', {
-        question: question,
-        type: 'home',
-        ClientType: 'mobile',
-        browser: 'Webkit',
-        userid: RestTools.GetGUID(),
-        ip: '182.98.177.137',
+    RestTools.httpRequest_a(RestTools.submitUrl, 'mscollect/admin/cache/submit', 'POST', {
+      question: question,
+      type: 'home',
+      ClientType: 'mobile',
+      browser: 'Webkit',
+      userid: RestTools.GetGUID(),
+      ip: '182.98.177.137',
     }).then(res => {
       console.log(res)
     })
@@ -58,23 +62,21 @@ export default class Index extends Component {
 
   componentDidShow() {
     const guid = RestTools.GetGUID();
-    console.log(guid)
-    const message = mockData.message.length
-    // RestTools.httpRequest('', 'GET', {
-    //   guid: guid
-    // }).then(res => {
-    //   const message = res.length;
-    //   this.setState({
-    //     searchValue: "",
-    //     message: message > 0 ? message : 0
-    //   })
-    // }).catch(res => {
-    //   console.log(res)
-    // })
-    this.setState({
-      searchValue: "",
-      message: message
-    });
+    RestTools.httpRequest_a(RestTools.mscollectUrl, 'msshow/admin/answer/getQuestionLists', 'GET', {
+      username: guid,
+      pageCount: this.state.pageInfo.pageCount,
+      pageSize: this.state.pageInfo.pageSize,
+    }).then(res => {
+      if (res.code === 200) {
+        const message = res.result.data.length;
+        this.setState({
+          searchValue: "",
+          message: message > 0 ? message : 0
+        })
+      }
+    }).catch(res => {
+      console.log(res)
+    })
   }
 
   handleClickItem = value => {
@@ -187,7 +189,7 @@ export default class Index extends Component {
             onSearch={this.handleSearch.bind(this)}
           />
           {showIcon ? <Icon className='micSwitch iconfont icon-microphone' onClick={this.switchMic.bind(this)}></Icon> : null}
-          {/* <View onClick={this.goMgClick.bind(this)}>
+          <View onClick={this.goMgClick.bind(this)}>
             <AtBadge
               value={this.state.message > 0 ? this.state.message : 0}
               className="inform"
@@ -195,7 +197,7 @@ export default class Index extends Component {
             >
               <AtIcon value='message' size='24' color="#fff"></AtIcon>
             </AtBadge>
-          </View> */}
+          </View>
         </View>
 
         <ScrollView className='bottom'>

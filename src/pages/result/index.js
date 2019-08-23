@@ -338,7 +338,7 @@ export default class Index extends Component {
   }
 
   behaviorCollect(question) {
-    RestTools.httpRequest_a('http://192.168.103.24:8080/', 'mscollect/admin/cache/submit', 'POST', {
+    RestTools.httpRequest_a(RestTools.submitUrl, 'mscollect/admin/cache/submit', 'POST', {
       question: question,
       type: 'search',
       ClientType: 'mobile',
@@ -406,7 +406,11 @@ export default class Index extends Component {
             )
           }
         } else {
-          this.getSgData(value)
+          // this.getSgData(value)
+          this.setState({
+            loading: false,
+            errMsg: res.msg
+          })
         }
       })
       .catch(err => {

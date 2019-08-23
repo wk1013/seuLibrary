@@ -11,9 +11,9 @@ export default class SearchPanel extends Component {
 		super(props);
 		this.state = {
 			value: this.props.searchValue || "",
-			listItems: JSON.parse(localStorage.getItem('History')),
+			listItems: JSON.parse(localStorage.getItem('History')) || [],
 			PointItems: [],
-			array: JSON.parse(localStorage.getItem('History')),
+			array: JSON.parse(localStorage.getItem('History'))|| [],
 			display: 'none',
 			display_a: 'none',
 		};
